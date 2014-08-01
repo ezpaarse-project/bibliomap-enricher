@@ -1,0 +1,24 @@
+{
+  "name": "ezpaarse2log.io",
+  "version": "0.0.1",
+  "description": "Script used to parse in ezPAARSE log.io harvested log lines in real time.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ezpaarse-project/ezpaarse2log.io.git"
+  },
+  "author": "Stéphane Gully <stephane.gully@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ezpaarse-project/ezpaarse2log.io/issues"
+  },
+  "homepage": "https://github.com/ezpaarse-project/ezpaarse2log.io",
+  "dependencies": {
+    "event-stream": "^3.1.7",
+    "log.io-server-parser": "^0.1.1",
+    "request": "^2.39.0"
+  }
+}
