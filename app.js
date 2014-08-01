@@ -20,7 +20,7 @@ server.on('+node', function (node, streams) {
         url: 'http://127.0.0.1:40010',
         headers: {
          'Accept': 'application/jsonstream',
-         'Double-Click-Removal': '0' // pas de dédoublonnage counter pour le temps réel
+         'Double-Click-Removal': 'false' // pas de dédoublonnage counter pour le temps réel
         }
       }),
       writeStream: es.through()
