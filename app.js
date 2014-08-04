@@ -4,6 +4,7 @@
 var LogIoServerParser = require('log.io-server-parser');
 var request = require('request');
 var es      = require('event-stream'); 
+var JSONStream = require('JSONStream');
 
 var ezpaarseJobs = {};
 
@@ -20,14 +21,23 @@ server.on('+node', function (node, streams) {
         url: 'http://127.0.0.1:40010',
         headers: {
          'Accept': 'application/jsonstream',
-         'Double-Click-Removal': 'false', // pas de dédoublonnage counter pour le temps réel
-         'ezPAARSE-Buffer-Size': 0        // pas de buffering des lignes de logs pour le temps réel
+          // pas de dédoublonnage counter 
+          // ni de buffering des lignes de logs
+          // pour permettre la diffusion temps réel des ECs
+         'Double-Click-Removal': 'false',
+         'ezPAARSE-Buffer-Size': 0
         }
       }),
       writeStream: es.through()
     };
     ezpaarseJobs[streamName].writeStream.pipe(ezpaarseJobs[streamName].request);
-    ezpaarseJobs[streamName].request.pipe(process.stdout);
+    ezpaarseJobs[streamName].request
+      .pipe(JSONStream.parse())
+      .pipe(es.mapSync(function (data) {
+        console.error(data)
+        return data
+      }));
+    // ezpaarseJobs[streamName].request.pipe(process.stdout);
   });
   console.log('ezpaarse jobs', streams);
 });
