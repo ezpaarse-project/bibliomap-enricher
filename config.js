@@ -1,4 +1,5 @@
 var defaultConfig = {
+  debug: false,
   ezpaarse: 'http://127.0.0.1:59599',
   logio: {
     listen: { // listen for harvested logs

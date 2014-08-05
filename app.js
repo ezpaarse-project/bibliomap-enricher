@@ -132,7 +132,9 @@ setInterval(function () {
         msg += ' ' + data.url;
         var logioMsg = '+log|' + streamName + '-ezpaarse' + '|bibliolog|info|' + msg;
         bibliolog.write(logioMsg + '\r\n');
-        console.log(logioMsg);
+        if (config.debug) {
+          console.log(logioMsg);          
+        }
       }));
 
     // vérifie que la connexion ezpaarse n'est pas fermée
