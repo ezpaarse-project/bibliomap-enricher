@@ -4,18 +4,19 @@
 var config = require('./config.js');
 
 var LogIoServerParser = require('log.io-server-parser');
-var request = require('request').defaults({'proxy': null});
-var es      = require('event-stream'); 
-var JSONStream = require('JSONStream');
+var request           = require('request').defaults({'proxy': null});
+var es                = require('event-stream'); 
+var JSONStream        = require('JSONStream');
+var net               = require('net');
 
-var net    = require('net');
-bibliolog  = net.connect({ port: 28778, host: '127.0.0.1' }, function () {
-  console.error('Connecté à bibliolog sur 127.0.0.1:28778 => prêt à broadcaster');
+var ezpaarseJobs = {};
+var bibliolog    = null;
 
-  var ezpaarseJobs = {};
+bibliolog = net.connect(config.logio.broadcast, function () {
+  console.error('Connecté à bibliolog sur ' + config.logio.broadcast.host + ':' + config.logio.broadcast.port + ' => prêt à broadcaster');
 
   // écoute les logs venant du harvester
-  var server = new LogIoServerParser({ port: 28777 });
+  var server = new LogIoServerParser(config.logio.listen);
   server.listen();
 
   server.on('+node', function (node, streams) {
@@ -47,7 +48,7 @@ bibliolog  = net.connect({ port: 28778, host: '127.0.0.1' }, function () {
       // sinon, création d'un nouveau job
       ezpaarseJobs[streamName] = {
         request: request.post({
-          url: 'http://127.0.0.1:40010',
+          url: config.ezpaarse,
           headers: {
            'Accept': 'application/jsonstream',
             // pas de dédoublonnage counter 
@@ -72,7 +73,7 @@ bibliolog  = net.connect({ port: 28778, host: '127.0.0.1' }, function () {
           msg += ' ' + (data.print_identifier || '-');
           msg += ' ' + (data.online_identifier || '-');
           msg += ' ' + (data.doi || '-');
-          var logioMsg = '+log|' + streamName + '-ecs' + '|bibliolog|info|' + msg;
+          var logioMsg = '+log|' + streamName + '-ezpaarse' + '|bibliolog|info|' + msg;
           bibliolog.write(logioMsg + '\r\n');
           console.log(logioMsg);
         }));
