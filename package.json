@@ -20,6 +20,7 @@
     "event-stream": "^3.1.7",
     "log.io-server-parser": "^0.1.1",
     "request": "^2.39.0",
-    "JSONStream": "^0.8.4"
+    "JSONStream": "^0.8.4",
+    "nconf": "^0.6.9"
   }
 }
