@@ -23,11 +23,11 @@ setInterval(function () {
 
   bibliolog = net.connect(config.logio.broadcast);
   bibliolog.on('connect', function () {
-    console.error('Connecté à bibliolog sur ' + config.logio.broadcast.host + ':' + config.logio.broadcast.port + ' => prêt à broadcaster');
+    console.error(new Date() + ' - Connecté à bibliolog sur ' + config.logio.broadcast.host + ':' + config.logio.broadcast.port + ' => prêt à broadcaster');
     bibliolog.connected = true;
   });
   bibliolog.on('close', function () {
-    console.error('Connexion bibliolog fermée');
+    console.error(new Date() + ' - Connexion bibliolog fermée');
     bibliolog = null;
   });
 }, config.autoConnectDelay);
@@ -67,7 +67,9 @@ setInterval(function () {
     if (ezpaarseJobs[streamName]) {
       ezpaarseJobs[streamName].writeStream.write(log + '\n');
     }
-    bibliolog.write('+log|' + Array.prototype.slice.call(arguments, 0).join('|') + '\r\n');
+    if (bibliolog && bibliolog.connected) {
+      bibliolog.write('+log|' + Array.prototype.slice.call(arguments, 0).join('|') + '\r\n');
+    }
   });
 
   server.on('unknown', function (data) {
@@ -99,7 +101,7 @@ setInterval(function () {
     // si le job est en cours, on ne fait rien
     if (ezpaarseJobs[streamName] !== null) return;
 
-    console.error("Création d'un job ezpaarse pour " + streamName);
+    console.error(new Date() + " - Création d'un job ezpaarse pour " + streamName);
 
     // sinon, création d'un nouveau job
     ezpaarseJobs[streamName] = {
@@ -139,7 +141,7 @@ setInterval(function () {
 
     // vérifie que la connexion ezpaarse n'est pas fermée
     ezpaarseJobs[streamName].request.on('error', function (err) {
-      console.error('Nettoyage du job ezpaarse terminé sur ' + streamName + ' [' + err + ']');
+      console.error(new Date() + ' - Nettoyage du job ezpaarse terminé sur ' + streamName + ' [' + err + ']');
       delete ezpaarseJobs[streamName];
       ezpaarseJobs[streamName] = null;
     });
