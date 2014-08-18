@@ -26,6 +26,9 @@ setInterval(function () {
     console.error(new Date() + ' - Connecté à bibliolog sur ' + config.logio.broadcast.host + ':' + config.logio.broadcast.port + ' => prêt à broadcaster');
     bibliolog.connected = true;
   });
+  bibliolog.on('error', function (err) {
+    console.error(new Date() + ' - Connexion bibliolog en erreur : ' + err);
+  });
   bibliolog.on('close', function () {
     console.error(new Date() + ' - Connexion bibliolog fermée');
     bibliolog = null;
