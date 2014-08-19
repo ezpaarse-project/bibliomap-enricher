@@ -136,7 +136,9 @@ setInterval(function () {
         msg += ' ' + (data.doi || '-');
         msg += ' ' + data.url;
         var logioMsg = '+log|' + streamName + '-ezpaarse' + '|bibliolog|info|' + msg;
-        bibliolog.write(logioMsg + '\r\n');
+        if (bibliolog && bibliolog.connected) {
+          bibliolog.write(logioMsg + '\r\n');
+        }
         if (config.debug) {
           console.log(logioMsg);          
         }
