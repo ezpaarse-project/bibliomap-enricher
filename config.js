@@ -1,17 +1,19 @@
 var defaultConfig = {
   debug: false,
-  ezpaarse: 'http://127.0.0.1:59599',
+  ezpaarse: 'http://127.0.0.1:59599', // adjust if ezpaarse is installed elsewhere
   logio: {
-    listen: { // listen for harvested logs
-      host: '127.0.0.1',
-      port: 28777
+    // listen for harvested logs
+    listen: {
+      host: '127.0.0.1',  // adjust where log-io.harvester is located
+      port: 28777         // this is the default log.io-harvester destination port
     },
-    broadcast: { // broadcast to logio server daemon
-      host: '127.0.0.1',
-      port: 28778
+    // broadcast to logio server daemon
+    broadcast: {
+      host: '127.0.0.1',  // adjust where bibliolog (log.io-server) is located
+      port: 28778         // port choosen by bibliolog where to broadcast harvested logs + ezpaarse usage events
     }
   },
-  autoConnectDelay: 1000,
+  autoConnectDelay: 1000, // time to wait beetween each connection try
 };
 
 // to allow config overloading 
