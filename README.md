@@ -2,7 +2,9 @@
 
 Script used to parse in ezPAARSE log.io harvested log lines in real time.
 
-<img src="https://docs.google.com/drawings/d/1wx-IudPtbiFurr8FMr84JOEKgfoTSC7DffOu6Ev6RAk/pub?w=828&amp;h=350">
+<p align="center">
+<img src="https://docs.google.com/drawings/d/1wx-IudPtbiFurr8FMr84JOEKgfoTSC7DffOu6Ev6RAk/pub?w=828&amp;h=350" />
+</p>
 
 ## Installation
 
