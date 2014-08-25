@@ -146,10 +146,24 @@ setInterval(function () {
 
     // vérifie que la connexion ezpaarse n'est pas fermée
     ezpaarseJobs[streamName].request.on('error', function (err) {
-      console.error(new Date() + ' - Nettoyage du job ezpaarse terminé sur ' + streamName + ' [' + err + ']');
+      console.error(new Date() + ' - Erreur sur le job ezpaarse ' + streamName + ' [' + err + ']');
+    });
+    ezpaarseJobs[streamName].request.on('error', function (err) {
+      console.error(new Date() + ' - Close du job ezpaarse ' + streamName + ' [' + err + ']');
+    });
+    ezpaarseJobs[streamName].request.on('end', function () {
       delete ezpaarseJobs[streamName];
       ezpaarseJobs[streamName] = null;
+      console.error(new Date() + ' - Nettoyage du job ezpaarse terminé sur ' + streamName);
     });
+
+    // // close each hours ezpaarse connections
+    // // could help to stabilize bibliolog
+    // setTimeout(function () {
+    //   console.error(new Date() + ' - Aborting ezpaarse job ' + streamName);
+    //   ezpaarseJobs[streamName].request.end();
+    // }, 60 * 60 * 1000);
+
   }); // forEach streams
 }, config.autoConnectDelay);
 
