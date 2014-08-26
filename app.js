@@ -146,12 +146,19 @@ setInterval(function () {
 
     // vérifie que la connexion ezpaarse n'est pas fermée
     ezpaarseJobs[streamName].request.on('error', function (err) {
-      console.error(new Date() + ' - Erreur sur le job ezpaarse ' + streamName + ' [' + err + ']');
+      console.error(new Date() + ' - "error" sur le job ezpaarse ' + streamName + ' [' + err + ']');
+      delete ezpaarseJobs[streamName];
+      ezpaarseJobs[streamName] = null;
+      console.error(new Date() + ' - Nettoyage du job ezpaarse terminé sur ' + streamName);
     });
-    ezpaarseJobs[streamName].request.on('error', function (err) {
-      console.error(new Date() + ' - Close du job ezpaarse ' + streamName + ' [' + err + ']');
+    ezpaarseJobs[streamName].request.on('close', function () {
+      console.error(new Date() + ' - "close" sur le job ezpaarse ' + streamName);
+      delete ezpaarseJobs[streamName];
+      ezpaarseJobs[streamName] = null;
+      console.error(new Date() + ' - Nettoyage du job ezpaarse terminé sur ' + streamName);
     });
     ezpaarseJobs[streamName].request.on('end', function () {
+      console.error(new Date() + ' - "end" sur le job ezpaarse ' + streamName);
       delete ezpaarseJobs[streamName];
       ezpaarseJobs[streamName] = null;
       console.error(new Date() + ' - Nettoyage du job ezpaarse terminé sur ' + streamName);
