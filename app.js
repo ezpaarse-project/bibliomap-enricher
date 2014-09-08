@@ -13,6 +13,13 @@ var ezpaarseJobs = {};
 var bibliolog    = null;
 var server       = null;
 
+// Par défaut nodejs limite le nombre de connexion à 5 
+// ce qui signifie que si on ne change pas cette limite
+// on ne pourrait pas faire plus de 5 traitements ezpaarse
+// simultanément.
+// On passe la limite à 20 car nous avons 8 bibliosites.
+require('http').globalAgent.maxSockets = 20;
+
 /**
  * essai de connexion à bibliolog
  * toutes les N secondes
@@ -163,6 +170,11 @@ setInterval(function () {
       ezpaarseJobs[streamName] = null;
       console.error(new Date() + ' - Nettoyage du job ezpaarse terminé sur ' + streamName);
     });
+
+    ezpaarseJobs[streamName].request.on('response', function (response) {
+      console.error(new Date() + ' - Job ' + response.headers['job-id'] + ' ok pour ' + streamName);
+    });
+
 
     // // close each hours ezpaarse connections
     // // could help to stabilize bibliolog
