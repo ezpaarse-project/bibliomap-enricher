@@ -13,6 +13,11 @@ var defaultConfig = {
       port: 28778         // port choosen by bibliolog where to broadcast harvested logs + ezpaarse usage events
     }
   },
+  // broadcast ezpaarse EC's through a network socket
+  bibliomap: {
+    host: '127.0.0.1', // socket host
+    port: 28779        // socket port
+  },
   autoConnectDelay: 1000, // time to wait beetween each connection try
 };
 

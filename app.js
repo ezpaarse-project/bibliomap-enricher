@@ -11,6 +11,7 @@ var net               = require('net');
 
 var ezpaarseJobs = {};
 var bibliolog    = null;
+var bibliomap    = null;
 var server       = null;
 
 // Par défaut nodejs limite le nombre de connexion à 5 
@@ -19,6 +20,29 @@ var server       = null;
 // simultanément.
 // On passe la limite à 20 car nous avons 8 bibliosites.
 require('http').globalAgent.maxSockets = 20;
+
+/**
+ * essai de connexion à bibliomap
+ * toutes les N secondes
+ */
+setInterval(function () {
+  // si une connexion avec bibliomap est en cours on ne fait rien
+  if (bibliomap !== null) return;
+
+  bibliomap = net.connect(config.bibliomap.port, config.bibliomap.host);
+  bibliomap.on('connect', function () {
+    console.error(new Date() + ' - Connecté à bibliomap sur ' + config.bibliomap.host + ':' + config.bibliomap.port + ' => prêt à broadcaster');
+    bibliomap.connected = true;
+    bibliomap.write('HELLO');
+  });
+  bibliomap.on('error', function (err) {
+    console.error(new Date() + ' - Connexion bibliomap en erreur : ' + err);
+  });
+  bibliomap.on('close', function () {
+    console.error(new Date() + ' - Connexion bibliomap fermée');
+    bibliomap = null;
+  });
+}, config.autoConnectDelay);
 
 /**
  * essai de connexion à bibliolog
