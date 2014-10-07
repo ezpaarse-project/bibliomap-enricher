@@ -170,6 +170,7 @@ setInterval(function () {
           bibliolog.write(logioMsg + '\r\n');
         }
         if (bibliomap && bibliomap.connected) {
+          data.ezproxyName = streamName;
           bibliomap.write(JSON.stringify(data) + '\n');
         }
         if (config.debug) {
