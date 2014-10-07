@@ -33,7 +33,6 @@ setInterval(function () {
   bibliomap.on('connect', function () {
     console.error(new Date() + ' - Connecté à bibliomap sur ' + config.bibliomap.host + ':' + config.bibliomap.port + ' => prêt à broadcaster');
     bibliomap.connected = true;
-    bibliomap.write('HELLO');
   });
   bibliomap.on('error', function (err) {
     console.error(new Date() + ' - Connexion bibliomap en erreur : ' + err);
@@ -169,6 +168,9 @@ setInterval(function () {
         var logioMsg = '+log|' + streamName + '-ezpaarse' + '|bibliolog|info|' + msg;
         if (bibliolog && bibliolog.connected) {
           bibliolog.write(logioMsg + '\r\n');
+        }
+        if (bibliomap && bibliomap.connected) {
+          bibliomap.write(JSON.stringify(data) + '\n');
         }
         if (config.debug) {
           console.log(logioMsg);          
