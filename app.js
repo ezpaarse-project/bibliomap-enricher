@@ -47,23 +47,24 @@ setInterval(function () {
  * essai de connexion à bibliolog
  * toutes les N secondes
  */
-setInterval(function () {
-  // si une connexion avec bibliolog est en cours on ne fait rien
-  if (bibliolog !== null) return;
+ setInterval(function () {
+   // si une connexion avec bibliolog est en cours on ne fait rien
+   if (bibliolog !== null) return;
 
-  bibliolog = net.connect(config.logio.broadcast);
-  bibliolog.on('connect', function () {
-    console.error(new Date() + ' - Connecté à bibliolog sur ' + config.logio.broadcast.host + ':' + config.logio.broadcast.port + ' => prêt à broadcaster');
-    bibliolog.connected = true;
-  });
-  bibliolog.on('error', function (err) {
-    console.error(new Date() + ' - Connexion bibliolog en erreur : ' + err);
-  });
-  bibliolog.on('close', function () {
-    console.error(new Date() + ' - Connexion bibliolog fermée');
-    bibliolog = null;
-  });
-}, config.autoConnectDelay);
+   bibliolog = net.connect(config.logio.broadcast);
+   bibliolog.on('connect', function () {
+     console.error(new Date() + ' - Connecté à bibliolog sur ' + config.logio.broadcast.host + ':' + config.logio.broadcast.port + ' => prêt à broadcaster');
+     bibliolog.connected = true;
+   });
+   bibliolog.on('error', function (err) {
+     console.error(new Date() + ' - Connexion bibliolog en erreur : ' + err);
+   });
+   bibliolog.on('close', function () {
+     console.error(new Date() + ' - Connexion bibliolog fermée');
+     bibliolog = null;
+   });
+ }, config.autoConnectDelay);
+
 
 /**
  * écoute le harvester uniquement si
@@ -159,6 +160,7 @@ setInterval(function () {
         msg += '[' + data.datetime + ']';
         msg += ' ' + data.login;
         msg += ' ' + data.platform;
+        msg += ' ' + data.platform_name;
         msg += ' ' + data.rtype;
         msg += ' ' + data.mime;
         msg += ' ' + (data.print_identifier || '-');
