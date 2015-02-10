@@ -1,6 +1,16 @@
 var defaultConfig = {
   debug: false,
-  ezpaarse: 'http://127.0.0.1:59599', // adjust if ezpaarse is installed elsewhere
+  ezpaarse: {
+    url: 'http://127.0.0.1:59599', // adjust if ezpaarse is installed elsewhere
+    headers: {
+      'Accept': 'application/jsonstream',
+      // pas de dédoublonnage counter 
+      // ni de buffering des lignes de logs
+      // pour permettre la diffusion temps réel des ECs
+      'Double-Click-Removal': 'false',
+      'ezPAARSE-Buffer-Size': 0
+    }
+  },
   logio: {
     // listen for harvested logs
     listen: {

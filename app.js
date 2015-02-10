@@ -140,15 +140,8 @@ setInterval(function () {
     // sinon, création d'un nouveau job
     ezpaarseJobs[streamName] = {
       request: request.post({
-        url: config.ezpaarse,
-        headers: {
-         'Accept': 'application/jsonstream',
-          // pas de dédoublonnage counter 
-          // ni de buffering des lignes de logs
-          // pour permettre la diffusion temps réel des ECs
-         'Double-Click-Removal': 'false',
-         'ezPAARSE-Buffer-Size': 0
-        }
+        url: config.ezpaarse.url,
+        headers: config.ezpaarse.headers
       }),
       writeStream: es.through()
     };
