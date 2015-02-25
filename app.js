@@ -68,13 +68,15 @@ setInterval(function () {
 
 /**
  * écoute le harvester uniquement si
- * on a une connexion avec bibliolog
+ * on a une connexion avec bibliolog ou bibliomap
  * essai toutes les N secondes
  */
 setInterval(function () {
-  // si pas de connexion avec bibliolog 
+  // si pas de connexion avec bibliolog ni bibliomap
   // ou qu'on écoute déja
-  if (bibliolog === null || !bibliolog.connected || server) return;
+  if ((bibliolog === null && bibliomap ===null) 
+     || (bibliolog && !bibliolog.connected && bibliomap && !bibliomap.connected)
+     || server) return;
 
   // écoute les logs venant du harvester
   server = new LogIoServerParser(config.listen.harvester);
@@ -94,7 +96,9 @@ setInterval(function () {
     });
 
     // broadcast to bibliolog
-    bibliolog.write('+node|bibliolog|' + proxyStreams.join(',') + '\r\n');
+    if (bibliolog && bibliolog.connected) {
+      bibliolog.write('+node|bibliolog|' + proxyStreams.join(',') + '\r\n');
+    }
   });
 
   server.on('+log', function (streamName, node, type, log) {
