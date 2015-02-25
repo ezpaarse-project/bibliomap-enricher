@@ -29,9 +29,9 @@ setInterval(function () {
   // si une connexion avec bibliomap est en cours on ne fait rien
   if (bibliomap !== null) return;
 
-  bibliomap = net.connect(config.bibliomap.port, config.bibliomap.host);
+  bibliomap = net.connect(config.broadcast.bibliomap);
   bibliomap.on('connect', function () {
-    console.error(new Date() + ' - Connecté à bibliomap sur ' + config.bibliomap.host + ':' + config.bibliomap.port + ' => prêt à broadcaster');
+    console.error(new Date() + ' - Connecté à bibliomap sur ' + config.broadcast.bibliomap.host + ':' + config.broadcast.bibliomap.port + ' => prêt à broadcaster');
     bibliomap.connected = true;
   });
   bibliomap.on('error', function (err) {
@@ -51,9 +51,9 @@ setInterval(function () {
    // si une connexion avec bibliolog est en cours on ne fait rien
    if (bibliolog !== null) return;
 
-   bibliolog = net.connect(config.logio.broadcast);
+   bibliolog = net.connect(config.broadcast.bibliolog);
    bibliolog.on('connect', function () {
-     console.error(new Date() + ' - Connecté à bibliolog sur ' + config.logio.broadcast.host + ':' + config.logio.broadcast.port + ' => prêt à broadcaster');
+     console.error(new Date() + ' - Connecté à bibliolog sur ' + config.broadcast.bibliolog.host + ':' + config.broadcast.bibliolog.port + ' => prêt à broadcaster');
      bibliolog.connected = true;
    });
    bibliolog.on('error', function (err) {
@@ -77,7 +77,7 @@ setInterval(function () {
   if (bibliolog === null || !bibliolog.connected || server) return;
 
   // écoute les logs venant du harvester
-  server = new LogIoServerParser(config.logio.listen);
+  server = new LogIoServerParser(config.listen.harvester);
   server.listen();
 
   server.on('+node', function (node, streams) {

@@ -11,22 +11,24 @@ var defaultConfig = {
       'ezPAARSE-Buffer-Size': 0
     }
   },
-  logio: {
+  listen: {
     // listen for harvested logs
-    listen: {
+    harvester: {
       host: '127.0.0.1',  // adjust where log-io.harvester is located
-      port: 28777         // this is the default log.io-harvester destination port
-    },
-    // broadcast to logio server daemon
-    broadcast: {
-      host: '127.0.0.1',  // adjust where bibliolog (log.io-server) is located
-      port: 28778         // port choosen by bibliolog where to broadcast harvested logs + ezpaarse usage events
+      port: 28770         // this is the default log.io-harvester destination port
     }
   },
+  broadcast: {
+  // broadcast to logio server daemon
   // broadcast ezpaarse EC's through a network socket
-  bibliomap: {
-    host: '127.0.0.1', // socket host
-    port: 28779        // socket port
+    bibliolog: {
+      host: '127.0.0.1',  // adjust where bibliolog (log.io-server) is located
+      port: 28778         // port choosen by bibliolog where to broadcast harvested logs + ezpaarse usage events
+    },
+    bibliomap: {
+      host: '127.0.0.1', // socket host
+      port: 28779        // socket port
+    }
   },
   autoConnectDelay: 1000, // time to wait beetween each connection try
 };
