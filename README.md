@@ -125,3 +125,38 @@ echo "module.exports = {
     }
   }};" > ./config.local.js
 ```
+## Running ezpaarse2log.io
+
+### Start
+
+On **{ezproxy-server}**:
+```bash
+log-io.harvester
+```
+On **{bibliolog-server}** (or bibliomap):
+```bash
+./etc/init.d/bibliolog start
+```
+On **{ezpaarse2log-io-server}**:
+```bash
+./etc/init.d/ezpaarse2log.io start
+```
+
+### Status
+
+```bash
+./etc/init.d/ezpaarse2log.io status
+```
+
+### Stop
+
+```bash
+./etc/init.d/ezpaarse2log.io stop
+```
+
+### Monitoring (log files)
+
+```bash
+tail -f ./logs/ezpaarse2log.io-server-stderr.log
+tail -f ./logs/ezpaarse2log.io-stdout.log
+```
