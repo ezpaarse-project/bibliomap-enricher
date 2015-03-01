@@ -34,13 +34,6 @@ cd ezpaarse2log.io
 npm install
 ```
 
-## Usage
-
-```bash
-cd ezpaarse2log.io
-node app.js
-```
-
 ## Configuration
 
 ### log.io-harvester (raw log server side)
