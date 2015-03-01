@@ -28,6 +28,8 @@ npm install -g log.io@0.3.2
 ```
 ## Installation
 
+on **{ezpaarse2log-io-server}**
+
 ```bash
 git clone https://github.com/ezpaarse-project/ezpaarse2log.io.git
 cd ezpaarse2log.io
@@ -36,7 +38,9 @@ npm install
 
 ## Configuration
 
-### log.io-harvester (raw log server side)
+### on **{ezpaarse2log-io-server}**
+
+log.io-harvester (raw log server side)
 
 You have to configure ``log.io-harvester`` on **{ezproxy-server}** in order to:
   - listen for your ezproxy(s) log file
@@ -62,6 +66,8 @@ exports.config = {
   }
 }
 ```
+### On **{ezpaarse2log-io-server}**
+
 Default config:
 ```javascript
 var defaultConfig = {
