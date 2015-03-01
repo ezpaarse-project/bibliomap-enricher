@@ -11,6 +11,7 @@ This module is used by <a href="https://github.com/ezpaarse-project/bibliolog">b
   * 2 serveurs with Linux OS (ex: debian or ubuntu)
     * 1st server hosts ezproxy daemons and especially your ezproxy raw log files (assume that server ip or hostname is: **{ezproxy-server}**)
     * 2nd server hosts ezpaarse2log.io and bibliolog or bibliomap (or both) (assume that server ip or hostname is: **{ezpaarse2log-io-server}**)
+    
   * Install curl and git on **{ezpaarse2log-io-server}** and **{ezproxy-server}**:
 ```bash
 sudo apt-get install curl git
@@ -26,6 +27,16 @@ nvm alias default 0.10
 ```bash
 npm install -g log.io@0.3.2
 ```
+
+  * Install ezpaarse on **{ezpaarse2log-io-server}** and run it :
+```bash
+git clone https://github.com/ezpaarse-project/ezpaarse.git
+cd ezpaarse/
+git checkout `git describe --tags --abbrev=0`
+make
+make start
+```
+
 ## Installation
 
 on **{ezpaarse2log-io-server}**
