@@ -1,6 +1,7 @@
 # ezpaarse2log.io
 
 Script used to parse in ezPAARSE log.io harvested log lines in real time.
+
 This module is used by <a href="https://github.com/ezpaarse-project/bibliolog">bibliolog module</a> (show log analysis) or <a href="https://github.com/ezpaarse-project/bibliomap">bibliomap module</a> (show consultations in a map) or both.
 
 <img src="https://docs.google.com/drawings/d/1bkxEEBL1kLzH76dkIYFzspYHOVajDjQHCijU3mxJLnM/pub?w=694&amp;h=519">
@@ -63,7 +64,8 @@ var defaultConfig = {
 ```
 
 To overload config, create a config.local.js file.
-Example:
+
+Example for ezproxy logs with user agent :
 ```javascript
 module.exports = {
   ezpaarse: {
