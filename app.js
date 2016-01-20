@@ -80,7 +80,8 @@ setInterval(function () {
 
   // écoute les logs venant du harvester
   server = new LogIoServerParser(config.listen.harvester);
-  server.listen();
+  server.listen(function() {console.error(new Date() + ' - Connexion de log.io harvester recue');});
+
 
   server.on('+node', function (node, streams) {
     var proxyStreams = [];

@@ -8,14 +8,16 @@ var defaultConfig = {
       // ni de buffering des lignes de logs
       // pour permettre la diffusion temps réel des ECs
       'Double-Click-Removal': 'false',
-      'ezPAARSE-Buffer-Size': 0
+      'crossref-enrich': 'false',
+      // pour ne pas attendre avant d'envoyer des paquets de DOI a resoudre
+      'crossref-buffer-size': 0
     }
   },
   listen: {
     // listen for harvested logs
     harvester: {
       host: '127.0.0.1',  // adjust where log-io.harvester is located
-      port: 28770         // this is the default log.io-harvester destination port
+      port: 27777         // this is the default log.io-harvester destination port
     }
   },
   broadcast: {
@@ -23,11 +25,11 @@ var defaultConfig = {
   // broadcast ezpaarse EC's through a network socket
     bibliolog: {
       host: '127.0.0.1',  // adjust where bibliolog (log.io-server) is located
-      port: 28778         // port choosen by bibliolog where to broadcast harvested logs + ezpaarse usage events
+      port: 27778         // port choosen by bibliolog where to broadcast harvested logs + ezpaarse usage events
     },
     bibliomap: {
       host: '127.0.0.1', // socket host
-      port: 28779        // socket port
+      port: 27779        // socket port
     }
   },
   autoConnectDelay: 1000, // time to wait beetween each connection try
