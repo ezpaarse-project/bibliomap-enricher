@@ -4,7 +4,7 @@ services:
 
   ezpaarse2log.io:
     container_name: ezpaarse2log.io
-    image: ezpaarseproject/ezpaarse2log.io:1.0.1
+    image: ezpaarseproject/ezpaarse2log.io:1.0.2
     environment:
       NODE_ENV: "production"
       DEBUG: ${DEBUG}
