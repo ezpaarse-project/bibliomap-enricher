@@ -16,5 +16,14 @@ RUN yarn install && yarn cache clean
 # after dependencies installation
 COPY . /app
 
+# ezmasterification of ezpaarse2log.io
+# see https://github.com/Inist-CNRS/ezmaster
+# (no data directory)
+# http port is not used
+RUN echo '{ \
+  "httpPort": 3000, \
+  "configPath": "/app/config.json" \
+}' > /etc/ezmaster.json
+
 # run the application
 CMD ["npm", "start"]
