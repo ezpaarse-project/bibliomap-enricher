@@ -6,6 +6,9 @@ services:
     container_name: ezpaarse2log.io
     image: ezpaarseproject/ezpaarse2log.io:2.0.0
     environment:
+      http_proxy:  ${http_proxy}
+      https_proxy: ${https_proxy}
+      no_proxy: ${no_proxy}
       NODE_ENV: "production"
       DEBUG: ${DEBUG}
     working_dir: /app
