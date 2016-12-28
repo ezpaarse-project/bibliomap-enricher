@@ -14,7 +14,7 @@
     "url": "git://github.com/ezpaarse-project/ezpaarse2log.io.git"
   },
   "author": "Stéphane Gully <stephane.gully@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ezpaarse-project/ezpaarse2log.io/issues"
   },
