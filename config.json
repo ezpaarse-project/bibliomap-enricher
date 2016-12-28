@@ -1,0 +1,25 @@
+{
+  "debug": false,
+  "ezpaarse": {
+    "url": "http://127.0.0.1:59599",
+    "headers": {
+      "Accept": "application/jsonstream",
+      "Double-Click-Removal": "false",
+      "crossref-enrich": "false",
+      "crossref-buffer-size": 0
+    }
+  },
+  "listen": {
+    "harvester": {
+      "host": "127.0.0.1",
+      "port": 27777
+    }
+  },
+  "broadcast": {
+    "bibliomap": {
+      "host": "127.0.0.1",
+      "port": 27779
+    }
+  },
+  "autoConnectDelay": 1000
+}
