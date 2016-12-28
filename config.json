@@ -10,7 +10,7 @@
     }
   },
   "listen": {
-    "harvester": {
+    "ezpaarse2log.io-harvester": {
       "host": "127.0.0.1",
       "port": 27777
     }

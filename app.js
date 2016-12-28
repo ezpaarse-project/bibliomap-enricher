@@ -24,9 +24,9 @@ require('http').globalAgent.maxSockets = 20;
  * Listen events coming from ezpaarse2log.io-harvester
  * then forward it to ezpaarse jobs
  */
-server = new LogIoServerParser(config.listen.harvester);
+server = new LogIoServerParser(config.listen['ezpaarse2log.io-harvester']);
 server.listen(function() {console.error(new Date() + ' - Connection from ezpaarse2log.io-harvester (log.io-harvester protocol)');});
-console.error(new Date() + ' - Ready to receive ezpaarse2log.io-harvester data at ' + JSON.stringify(config.listen.harvester));
+console.error(new Date() + ' - Ready to receive ezpaarse2log.io-harvester data at ' + JSON.stringify(config.listen['ezpaarse2log.io-harvester']));
 
 server.on('+node', function (node, streams) {
   var proxyStreams = [];
