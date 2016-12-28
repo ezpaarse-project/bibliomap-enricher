@@ -4,7 +4,10 @@
   "description": "Script used to parse in ezPAARSE log.io harvested log lines in real time.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "insertversion": "sed -i \"s#\\(image: ezpaarseproject/ezpaarse2log.io:\\)\\([\\.a-z0-9]\\+\\)#\\1${npm_package_version}#g\" docker-compose.yml",
+    "version": "npm run insertversion && git add docker-compose.yml",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
