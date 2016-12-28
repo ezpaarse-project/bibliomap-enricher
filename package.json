@@ -1,6 +1,6 @@
 {
   "name": "ezpaarse2log.io",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Script used to parse in ezPAARSE log.io harvested log lines in real time.",
   "main": "app.js",
   "scripts": {
