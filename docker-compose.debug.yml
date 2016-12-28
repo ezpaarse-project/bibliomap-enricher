@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+
+  ezpaarse2log.io:
+    container_name: ezpaarse2log.io
+    image: ezpaarseproject/ezpaarse2log.io:latest
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      no_proxy: ${no_proxy}
+      NODE_ENV: "development"
+      DEBUG: ${DEBUG}
+    tty: true         # to have nice debug(...) outputs
+    stdin_open: true  # to be able to use CTRL+C to stop the debug
+    command: npm start

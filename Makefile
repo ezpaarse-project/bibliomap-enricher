@@ -22,6 +22,14 @@ install: ## install depedencies thanks to a dockerized npm install
 build: ## build the docker ezpaarseproject/ezpaarse2log.io image localy
 	@docker build -t ezpaarseproject/ezpaarse2log.io --build-arg http_proxy --build-arg https_proxy .
 
+run-debug: ## run ezpaarse2log.io in debug mode with docker
+	@docker-compose -f ./docker-compose.debug.yml up -d
+	@# attach to the ezpaarse2log.io container in order to be able to stop it easily with CTRL+C
+	@docker attach ezpaarse2log.io
+
+run-prod: ## run ezpaarse2log.io in production mode with the full dockerized image (see build)
+	@docker-compose -f ./docker-compose.yml up -d
+
 # makefile rule used to keep current user's unix rights on the docker mounted files
 chown:
 	@test ! -d $$(pwd)/node_modules || docker run -it --rm -v $$(pwd):/app node:6.9.1 chown -R $$(id -u):$$(id -g) /app/
