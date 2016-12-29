@@ -8,6 +8,7 @@ var request           = require('request').defaults({'proxy': null});
 var es                = require('event-stream'); 
 var JSONStream        = require('JSONStream');
 var net               = require('net');
+var debug             = require('debug')('ezpaarse2log.io');
 
 var ezpaarseJobs = {};
 var bibliomap    = null;
@@ -33,6 +34,7 @@ server.on('+node', function (node, streams) {
   // création des différents job ezpaarse
   // un par stream
   streams.forEach(function (streamName) {
+    debug('Initialization of ' + streamName);
     proxyStreams.push(streamName);
     proxyStreams.push(streamName + '-ezpaarse');
 
@@ -42,6 +44,7 @@ server.on('+node', function (node, streams) {
   });
 });
 server.on('+log', function (streamName, node, type, log) {
+  debug('Log line recieved: ', streamName, node, type, log);
   if (ezpaarseJobs[streamName]) {
     ezpaarseJobs[streamName].writeStream.write(log + '\n');
   }
@@ -57,7 +60,7 @@ setInterval(function () {
     // running job => skipping
     if (ezpaarseJobs[streamName] !== null) return;
 
-    console.error(new Date() + " - Create an ezpaarse job for " + streamName);
+    console.error(new Date() + " - Create an ezpaarse job for " + streamName + " at " + config.ezpaarse.url);
 
     // else, create a new job
     ezpaarseJobs[streamName] = {
@@ -87,9 +90,7 @@ setInterval(function () {
           data.ezproxyName = streamName;
           bibliomap.write(JSON.stringify(data) + '\n');
         }
-        if (config.debug) {
-          console.log(logioMsg);          
-        }
+        debug(logioMsg);
       }));
 
     // check the ezpaarse connection is not closed

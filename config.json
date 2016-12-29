@@ -1,12 +1,12 @@
 {
-  "debug": false,
   "ezpaarse": {
     "url": "http://127.0.0.1:59599",
     "headers": {
       "Accept": "application/jsonstream",
       "Double-Click-Removal": "false",
       "crossref-enrich": "false",
-      "crossref-buffer-size": 0
+      "ezPAARSE-Buffer-Size": 0,
+      "ezPAARSE-Predefined-Settings": "00-fr-bibcnrs"
     }
   },
   "listen": {
