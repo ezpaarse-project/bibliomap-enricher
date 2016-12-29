@@ -4,7 +4,7 @@ services:
 
   ezpaarse2log.io:
     container_name: ezpaarse2log.io
-    image: ezpaarseproject/ezpaarse2log.io:2.1.0
+    image: ezpaarseproject/ezpaarse2log.io:2.2.0
     environment:
       http_proxy:  ${http_proxy}
       https_proxy: ${https_proxy}
