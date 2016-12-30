@@ -34,7 +34,7 @@ Env variable can be used to customize it:
   * BBE_BROADCAST_VIEWER_PORT
 
 
-Look at [config.json](hhttps://github.com/ezpaarse-project/bibliomap-enricher/blob/master/config.json) to see the default values.
+Look at [config.json](https://github.com/ezpaarse-project/bibliomap-enricher/blob/master/config.json) to see the default values.
 
 ## Developement
 
