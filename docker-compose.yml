@@ -4,7 +4,7 @@ services:
 
   bibliomap-enricher:
     container_name: bibliomap-enricher
-    image: ezpaarseproject/bibliomap-enricher:3.0.0
+    image: ezpaarseproject/bibliomap-enricher:3.1.0
     environment:
       http_proxy:  ${http_proxy}
       https_proxy: ${https_proxy}
