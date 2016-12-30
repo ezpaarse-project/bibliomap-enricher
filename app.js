@@ -72,13 +72,8 @@ setInterval(function () {
     };
     ezpaarseJobs[streamName].writeStream.pipe(ezpaarseJobs[streamName].request);
     ezpaarseJobs[streamName].request
-      .pipe(es.mapSync(function (data) {
-        debug('MY DATA', '' + data)
-      }))
       .pipe(JSONStream.parse())
       .pipe(es.mapSync(function (data) {
-        debug('.');
-        debug(data);
         var msg = '';
         msg += '[' + data.datetime + ']';
         msg += ' ' + data.login;
