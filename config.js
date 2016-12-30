@@ -26,7 +26,7 @@ if (config.BBE_EZPAARSE_URL)          { config.ezpaarse.url = config.BBE_EZPAARS
 if (config.BBE_EZPAARSE_PREDEF)       { config.ezpaarse.headers['ezPAARSE-Predefined-Settings'] = config.BBE_EZPAARSE_PREDEF; }
 if (config.BBE_LISTEN_HARVESTER_HOST) { config.listen['bibliomap-harvester'].host = config.BBE_LISTEN_HARVESTER_HOST; }
 if (config.BBE_LISTEN_HARVESTER_PORT) { config.listen['bibliomap-harvester'].port = config.BBE_LISTEN_HARVESTER_PORT; }
-if (config.BBE_BROADCAST_VIEWER_HOST) { config.listen['bibliomap-viewer'].host = config.BBE_BROADCAST_VIEWER_HOST; }
-if (config.BBE_BROADCAST_VIEWER_PORT) { config.listen['bibliomap-viewer'].port = config.BBE_BROADCAST_VIEWER_PORT; }
+if (config.BBE_BROADCAST_VIEWER_HOST) { config.broadcast['bibliomap-viewer'].host = config.BBE_BROADCAST_VIEWER_HOST; }
+if (config.BBE_BROADCAST_VIEWER_PORT) { config.broadcast['bibliomap-viewer'].port = config.BBE_BROADCAST_VIEWER_PORT; }
 
 module.exports = config;
