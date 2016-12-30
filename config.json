@@ -10,16 +10,16 @@
     }
   },
   "listen": {
-    "ezpaarse2log.io-harvester": {
+    "bibliomap-harvester": {
       "host": "0.0.0.0",
       "port": 27777
     }
   },
   "broadcast": {
-    "bibliomap": {
+    "bibliomap-viewer": {
       "host": "127.0.0.1",
       "port": 27779
     }
   },
-  "autoConnectDelay": 1000
+  "autoConnectDelay": 3000
 }

@@ -8,7 +8,7 @@ var request           = require('request').defaults({'proxy': null});
 var es                = require('event-stream'); 
 var JSONStream        = require('JSONStream');
 var net               = require('net');
-var debug             = require('debug')('ezpaarse2log.io');
+var debug             = require('debug')('bibliomap-enricher');
 
 var ezpaarseJobs = {};
 var bibliomap    = null;
@@ -22,12 +22,12 @@ var server       = null;
 require('http').globalAgent.maxSockets = 20;
 
 /**
- * Listen events coming from ezpaarse2log.io-harvester
+ * Listen events coming from bibliomap-harvester
  * then forward it to ezpaarse jobs
  */
-server = new LogIoServerParser(config.listen['ezpaarse2log.io-harvester']);
-server.listen(function() {console.error(new Date() + ' - Connection from ezpaarse2log.io-harvester (log.io-harvester protocol)');});
-console.error(new Date() + ' - Ready to receive ezpaarse2log.io-harvester data at ' + JSON.stringify(config.listen['ezpaarse2log.io-harvester']));
+server = new LogIoServerParser(config.listen['bibliomap-harvester']);
+server.listen(function() {console.error(new Date() + ' - Connection from bibliomap-harvester (log.io-harvester protocol)');});
+console.error(new Date() + ' - Ready to receive bibliomap-harvester data at ' + JSON.stringify(config.listen['bibliomap-harvester']));
 
 server.on('+node', function (node, streams) {
   var proxyStreams = [];
@@ -44,7 +44,7 @@ server.on('+node', function (node, streams) {
   });
 });
 server.on('+log', function (streamName, node, type, log) {
-  debug('Log line recieved: ', streamName, node, type, log);
+  //debug('Log line recieved: ', streamName, node, type, log);
   if (ezpaarseJobs[streamName]) {
     ezpaarseJobs[streamName].writeStream.write(log + '\n');
   }
@@ -72,8 +72,13 @@ setInterval(function () {
     };
     ezpaarseJobs[streamName].writeStream.pipe(ezpaarseJobs[streamName].request);
     ezpaarseJobs[streamName].request
+      .pipe(es.mapSync(function (data) {
+        debug('MY DATA', '' + data)
+      }))
       .pipe(JSONStream.parse())
       .pipe(es.mapSync(function (data) {
+        debug('.');
+        debug(data);
         var msg = '';
         msg += '[' + data.datetime + ']';
         msg += ' ' + data.login;
@@ -136,9 +141,9 @@ setInterval(function () {
   // si une connexion avec bibliomap est en cours on ne fait rien
   if (bibliomap !== null) return;
 
-  bibliomap = net.connect(config.broadcast.bibliomap);
+  bibliomap = net.connect(config.broadcast['bibliomap-viewer']);
   bibliomap.on('connect', function () {
-    console.error(new Date() + ' - Connected to bibliomap ' + config.broadcast.bibliomap.host + ':' + config.broadcast.bibliomap.port + ' => ready to broadcast ezpaarse ECs');
+    console.error(new Date() + ' - Connected to bibliomap ' + config.broadcast['bibliomap-viewer'].host + ':' + config.broadcast['bibliomap-viewer'].port + ' => ready to broadcast ezpaarse ECs');
     bibliomap.connected = true;
   });
   bibliomap.on('error', function (err) {

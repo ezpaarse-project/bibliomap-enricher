@@ -19,15 +19,15 @@ install: ## install depedencies thanks to a dockerized npm install
 	@docker run -it --rm -v $$(pwd):/app -w /app --net=host -e NODE_ENV -e http_proxy -e https_proxy node:6.9.1 npm install
 	@make chown
 
-build: ## build the docker ezpaarseproject/ezpaarse2log.io image localy
-	@docker build -t ezpaarseproject/ezpaarse2log.io --build-arg http_proxy --build-arg https_proxy .
+build: ## build the docker ezpaarseproject/bibliomap-enricher image localy
+	@docker build -t ezpaarseproject/bibliomap-enricher --build-arg http_proxy --build-arg https_proxy .
 
-run-debug: ## run ezpaarse2log.io in debug mode with docker
+run-debug: ## run bibliomap-enricher in debug mode with docker
 	@docker-compose -f ./docker-compose.debug.yml up -d
-	@# attach to the ezpaarse2log.io container in order to be able to stop it easily with CTRL+C
-	@docker attach ezpaarse2log.io
+	@# attach to the bibliomap-enricher container in order to be able to stop it easily with CTRL+C
+	@docker attach bibliomap-enricher
 
-run-prod: ## run ezpaarse2log.io in production mode with the full dockerized image (see build)
+run-prod: ## run bibliomap-enricher in production mode with the full dockerized image (see build)
 	@docker-compose -f ./docker-compose.yml up -d
 
 # makefile rule used to keep current user's unix rights on the docker mounted files

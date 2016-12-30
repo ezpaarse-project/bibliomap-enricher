@@ -1,41 +1,45 @@
-# ezpaarse2log.io
+# bibliomap-enricher
 
-Script used to listen [ezpaarse2log.io-harvester](https://github.com/ezpaarse-project/ezpaarse2log.io-harvester) logs, send it to an ezPAARSE instance, catching the results and sending it in real time to [bibliomap](https://github.com/ezpaarse-project/bibliomap) using the [log.io protocol](http://logio.org/).
 
-<img src="https://docs.google.com/drawings/d/1bkxEEBL1kLzH76dkIYFzspYHOVajDjQHCijU3mxJLnM/pub?w=694&amp;h=519">
+Listen for [bibliomap-harvester](https://github.com/ezpaarse-project/bibliomap-harvester) data, send it to [ezPAARSE](https://github.com/ezpaarse-project/ezpaarse) for enrichments and send the result to [bibliomap-viewer](https://github.com/ezpaarse-project/bibliomap-viewer)
+
+
+
+## Architecture
+
+<p align="center">
+<img src="https://docs.google.com/drawings/d/1bkxEEBL1kLzH76dkIYFzspYHOVajDjQHCijU3mxJLnM/pub?w=694&h=519" />
+</p>
 
 ## Prerequisites
 
-Docker and docker-compose installed on each servers.
+  * Docker and docker-compose
 
-A 1st server hosts ezproxy daemons and especially your ezproxy raw log files (assume that server ip or hostname is: **{ezproxy-server}**) : you have to install and configure [ezpaarse2log.io-harvester](https://github.com/ezpaarse-project/ezpaarse2log.io-harvester) on it.
 
-A 2nd server hosts ezpaarse2log.io, ezpaarse and bibliomap (assume that server ip or hostname is: **{bibliomap-server}**). You have to install ezpaarse on **{bibliomap-server}** and run it :
+## Installation and running
 
-```bash
-git clone https://github.com/ezpaarse-project/ezpaarse.git
-cd ezpaarse/
-git checkout `git describe --tags --abbrev=0`
-make
-make start
-```
+As a standalone script, bibliomap-enricher is not very usefull. Please have a look to [bibliomap](https://github.com/ezpaarse-project/bibliomap) docker-compose.yml to understand how it can be orchestrated with required modules: [bibliomap-harvester](https://github.com/ezpaarse-project/bibliomap-harvester) and [bibliomap-viewer](https://github.com/ezpaarse-project/bibliomap-viewer)
 
-## Installation
 
-On the **{bibliomap-server}**
-
-TODO
 
 ## Configuration
 
-TODO
+Env variable can be used to customize it:
 
-## Running ezpaarse2log.io
+  * BBE_EZPAARSE_URL
+  * BBE_EZPAARSE_PREDEF
+  * BBE_LISTEN_HARVESTER_HOST
+  * BBE_LISTEN_HARVESTER_PORT
+  * BBE_BROADCAST_VIEWER_HOST
+  * BBE_BROADCAST_VIEWER_PORT
 
-### Start, Status, Stop
 
-TODO
+Look at [config.json](hhttps://github.com/ezpaarse-project/bibliomap-enricher/blob/master/config.json) to see the default values.
 
-### Monitoring (log files)
+## Developement
 
-TODO
+```
+git clone git@github.com:ezpaarse-project/bibliomap-enricher.git
+cd bibliomap-enricher
+DEBUG=bibliomap* make run-debug
+```
