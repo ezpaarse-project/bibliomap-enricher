@@ -8,7 +8,7 @@ require('http').globalAgent.maxSockets = 20;
 const config        = require('./config.js');
 const LogIoListener = require('log.io-server-parser');
 const request       = require('request').defaults({ proxy: null });
-const es            = require('event-stream');
+const PassThrough   = require('stream').PassThrough;
 const JSONStream    = require('JSONStream');
 const net           = require('net');
 const debug         = require('debug')('bibliomap-enricher');
@@ -88,7 +88,7 @@ function createJob(streamName) {
       url: config.ezpaarse.url,
       headers: config.ezpaarse.headers
     }),
-    writeStream: es.through()
+    writeStream: new PassThrough()
   };
 
   ezpaarseJobs.set(streamName, job);
@@ -96,7 +96,7 @@ function createJob(streamName) {
   job.writeStream.pipe(job.request);
   job.request
     .pipe(JSONStream.parse())
-    .pipe(es.mapSync(data => {
+    .on('data', data => {
       const msg = [
         `[${data.datetime}]`,
         data.login,
@@ -117,7 +117,7 @@ function createJob(streamName) {
       }
 
       debug(`+log|${streamName}-ezpaarse|bibliolog|info|${msg}`);
-    }));
+    });
 
   // check the ezpaarse connection is not closed
   job.request.on('error', err => { restartJob(err); });
