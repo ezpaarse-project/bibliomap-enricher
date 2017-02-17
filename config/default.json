@@ -1,0 +1,25 @@
+{
+  "ezpaarse": {
+    "url": "http://127.0.0.1:59599",
+    "headers": {
+      "Accept": "application/jsonstream",
+      "Double-Click-Removal": "false",
+      "crossref-enrich": "false",
+      "ezPAARSE-Buffer-Size": 0,
+      "ezPAARSE-Predefined-Settings": "00-fr-bibcnrs"
+    }
+  },
+  "listen": {
+    "bibliomap-harvester": {
+      "host": "0.0.0.0",
+      "port": 27777
+    }
+  },
+  "broadcast": {
+    "bibliomap-viewer": {
+      "host": "127.0.0.1",
+      "port": 27779
+    }
+  },
+  "autoConnectDelay": 3000
+}
