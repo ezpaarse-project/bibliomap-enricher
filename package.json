@@ -21,9 +21,9 @@
   "homepage": "https://github.com/ezpaarse-project/bibliomap-enricher",
   "dependencies": {
     "JSONStream": "^1.3.0",
+    "config": "^1.25.1",
     "debug": "^2.6.1",
     "log.io-server-parser": "^0.1.2",
-    "nconf": "^0.8.4",
     "request": "^2.79.0"
   }
 }

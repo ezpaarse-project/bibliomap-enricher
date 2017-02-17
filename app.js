@@ -5,7 +5,7 @@
 // Increase max concurrent connections (defaults to 5)
 require('http').globalAgent.maxSockets = 20;
 
-const config        = require('./config.js');
+const config        = require('config');
 const LogIoListener = require('log.io-server-parser');
 const request       = require('request').defaults({ proxy: null });
 const PassThrough   = require('stream').PassThrough;
