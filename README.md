@@ -24,7 +24,7 @@ As a standalone script, bibliomap-enricher is not very usefull. Please have a lo
 
 ## Configuration
 
-Bibliomap-enricher uses the [node-config](https://github.com/lorenwest/node-config). Configuration files are stored in the `config` directory. Have a look at [default.json](https://github.com/ezpaarse-project/bibliomap-enricher/blob/master/config/default.json) to see the default values.
+Bibliomap-enricher uses [node-config](https://github.com/lorenwest/node-config). Configuration files are stored in the `config` directory. Have a look at [default.json](https://github.com/ezpaarse-project/bibliomap-enricher/blob/master/config/default.json) to see the default values.
 You can create a local config file to overide the default values. Have a look at [the doc](https://github.com/lorenwest/node-config/wiki/Configuration-Files) for more details about the naming conventions and supported extensions.
 
 You can also customize the configuration with environment variables:
