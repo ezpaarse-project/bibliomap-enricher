@@ -24,7 +24,10 @@ As a standalone script, bibliomap-enricher is not very usefull. Please have a lo
 
 ## Configuration
 
-Env variable can be used to customize it:
+Bibliomap-enricher uses the [node-config](https://github.com/lorenwest/node-config). Configuration files are stored in the `config` directory. Have a look at [default.json](https://github.com/ezpaarse-project/bibliomap-enricher/blob/master/config/default.json) to see the default values.
+You can create a local config file to overide the default values. Have a look at [the doc](https://github.com/lorenwest/node-config/wiki/Configuration-Files) for more details about the naming conventions and supported extensions.
+
+You can also customize the configuration with environment variables:
 
   * BBE_EZPAARSE_URL
   * BBE_EZPAARSE_PREDEF
@@ -32,9 +35,7 @@ Env variable can be used to customize it:
   * BBE_LISTEN_HARVESTER_PORT
   * BBE_BROADCAST_VIEWER_HOST
   * BBE_BROADCAST_VIEWER_PORT
-
-
-Look at [config.json](https://github.com/ezpaarse-project/bibliomap-enricher/blob/master/config.json) to see the default values.
+  * BBE_AUTOCONNECT_DELAY
 
 ## Developement
 
