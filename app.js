@@ -1,151 +1,153 @@
 // log.io protocol example
 // +log biblioinserm bibliomap info 16.2.255.24 - 13BBIU1158 [01/Aug/2013:16:56:36 +0100] "GET http://onlinelibrary.wiley.com:80/doi/10.1111/dme.12357/pdf HTTP/1.1" 200 13639
+'use strict';
 
-var config = require('./config.js');
-
-var LogIoServerParser = require('log.io-server-parser');
-var request           = require('request').defaults({'proxy': null});
-var es                = require('event-stream'); 
-var JSONStream        = require('JSONStream');
-var net               = require('net');
-var debug             = require('debug')('bibliomap-enricher');
-
-var ezpaarseJobs = {};
-var bibliomap    = null;
-var server       = null;
-
-// Par défaut nodejs limite le nombre de connexion à 5 
-// ce qui signifie que si on ne change pas cette limite
-// on ne pourrait pas faire plus de 5 traitements ezpaarse
-// simultanément.
-// On passe la limite à 20 car nous avons 8 bibliosites.
+// Increase max concurrent connections (defaults to 5)
 require('http').globalAgent.maxSockets = 20;
+
+const config        = require('./config.js');
+const LogIoListener = require('log.io-server-parser');
+const request       = require('request').defaults({ proxy: null });
+const es            = require('event-stream');
+const JSONStream    = require('JSONStream');
+const net           = require('net');
+const debug         = require('debug')('bibliomap-enricher');
+
+const ezpaarseJobs = new Map();
+const viewerConfig = config.broadcast['bibliomap-viewer'];
+const viewerUrl    = `${viewerConfig.host}:${viewerConfig.port}`;
+
+/**
+ * Connect to bibliomap-viewer
+ */
+printLog(`Connecting to viewer at ${viewerUrl}`);
+const viewer = net.createConnection(viewerConfig);
+
+viewer.on('connect', () => {
+  printLog('Viewer connected');
+  viewer.connected = true;
+});
+
+viewer.on('error', err => {
+  printLog(`Viewer connection got error: ${err}`);
+});
+
+viewer.on('close', () => {
+  printLog(`Viewer disconnected, reconnecting in ${config.autoConnectDelay}ms`);
+  viewer.connected = false;
+
+  setTimeout(() => {
+    viewer.connect(viewerConfig);
+  }, config.autoConnectDelay);
+});
 
 /**
  * Listen events coming from bibliomap-harvester
  * then forward it to ezpaarse jobs
  */
-server = new LogIoServerParser(config.listen['bibliomap-harvester']);
-server.listen(function() {console.error(new Date() + ' - Connection from bibliomap-harvester (log.io-harvester protocol)');});
-console.error(new Date() + ' - Ready to receive bibliomap-harvester data at ' + JSON.stringify(config.listen['bibliomap-harvester']));
+const logIoListener = new LogIoListener(config.listen['bibliomap-harvester']);
 
-server.on('+node', function (node, streams) {
-  var proxyStreams = [];
-  // création des différents job ezpaarse
-  // un par stream
-  streams.forEach(function (streamName) {
-    debug('Initialization of ' + streamName);
-    proxyStreams.push(streamName);
-    proxyStreams.push(streamName + '-ezpaarse');
+logIoListener.listen(() => {
+  printLog(`Waiting for harvester at ${JSON.stringify(config.listen['bibliomap-harvester'])}`);
+});
 
-    // création d'un slot vide qui acceuillera
-    // un job ezpaarse
-    ezpaarseJobs[streamName] = null;
+logIoListener.server.on('connection', socket => {
+  printLog('Harvester connected');
+
+  socket.on('close', () => {
+    printLog('Harvester disconnected');
   });
 });
-server.on('+log', function (streamName, node, type, log) {
-  //debug('Log line recieved: ', streamName, node, type, log);
-  if (ezpaarseJobs[streamName]) {
-    ezpaarseJobs[streamName].writeStream.write(log + '\n');
+
+logIoListener.on('+node', (node, streams) => {
+  // Create one ezPAARSE job for each stream
+  streams.forEach(createJob);
+});
+
+logIoListener.on('+log', (streamName, node, type, log) => {
+  const job = ezpaarseJobs.get(streamName);
+
+  if (job) {
+    job.writeStream.write(`${log}\n`);
   }
 });
 
-
 /**
- * Create the ezpaarse jobs and respawn 
+ * Create the ezpaarse jobs and respawn
  * crashed or terminated jobs each N seconds
  */
-setInterval(function () {
-  Object.keys(ezpaarseJobs).forEach(function (streamName) {
-    // running job => skipping
-    if (ezpaarseJobs[streamName] !== null) return;
+function createJob(streamName) {
+  if (ezpaarseJobs.has(streamName)) {
+    return debug(`${streamName} already exists`);
+  }
 
-    console.error(new Date() + " - Create an ezpaarse job for " + streamName + " at " + config.ezpaarse.url);
+  printLog(`Creating an ezPAARSE job for ${streamName} at ${config.ezpaarse.url}`);
 
-    // else, create a new job
-    ezpaarseJobs[streamName] = {
-      request: request.post({
-        url: config.ezpaarse.url,
-        headers: config.ezpaarse.headers
-      }),
-      writeStream: es.through()
-    };
-    ezpaarseJobs[streamName].writeStream.pipe(ezpaarseJobs[streamName].request);
-    ezpaarseJobs[streamName].request
-      .pipe(JSONStream.parse())
-      .pipe(es.mapSync(function (data) {
-        var msg = '';
-        msg += '[' + data.datetime + ']';
-        msg += ' ' + data.login;
-        msg += ' ' + data.platform;
-        msg += ' ' + data.platform_name;
-        msg += ' ' + data.rtype;
-        msg += ' ' + data.mime;
-        msg += ' ' + (data.print_identifier || '-');
-        msg += ' ' + (data.online_identifier || '-');
-        msg += ' ' + (data.doi || '-');
-        msg += ' ' + data.url;
-        var logioMsg = '+log|' + streamName + '-ezpaarse' + '|bibliolog|info|' + msg;
-        if (bibliomap && bibliomap.connected) {
-          data.ezproxyName = streamName;
-          bibliomap.write(JSON.stringify(data) + '\n');
-        }
-        debug(logioMsg);
-      }));
+  const job = {
+    request: request.post({
+      url: config.ezpaarse.url,
+      headers: config.ezpaarse.headers
+    }),
+    writeStream: es.through()
+  };
 
-    // check the ezpaarse connection is not closed
-    ezpaarseJobs[streamName].request.on('error', function (err) {
-      console.error(new Date() + ' - "error" event on the ezpaarse job ' + streamName + ' [' + err + ']');
-      delete ezpaarseJobs[streamName];
-      ezpaarseJobs[streamName] = null;
-      console.error(new Date() + ' - Cleanup ezpaarse finished job on ' + streamName);
-    });
-    ezpaarseJobs[streamName].request.on('close', function () {
-      console.error(new Date() + ' - "close" event on the ezpaarse job ' + streamName);
-      delete ezpaarseJobs[streamName];
-      ezpaarseJobs[streamName] = null;
-      console.error(new Date() + ' - Cleanup ezpaarse finished job on ' + streamName);
-    });
-    ezpaarseJobs[streamName].request.on('end', function () {
-      console.error(new Date() + ' - "end" event on the ezpaarse job ' + streamName);
-      delete ezpaarseJobs[streamName];
-      ezpaarseJobs[streamName] = null;
-      console.error(new Date() + ' - Cleanup ezpaarse finished job on ' + streamName);
-    });
+  ezpaarseJobs.set(streamName, job);
 
-    ezpaarseJobs[streamName].request.on('response', function (response) {
-      console.error(new Date() + ' - Job ' + response.headers['job-id'] + ' ok for ' + streamName);
-    });
+  job.writeStream.pipe(job.request);
+  job.request
+    .pipe(JSONStream.parse())
+    .pipe(es.mapSync(data => {
+      const msg = [
+        `[${data.datetime}]`,
+        data.login,
+        data.platform,
+        data.platform_name,
+        data.rtype,
+        data.mime,
+        data.print_identifier || '-',
+        data.online_identifier || '-',
+        data.doi || '-',
+        data.url
+      ].join(' ');
 
+      data.ezproxyName = streamName;
 
-    // // close each hours ezpaarse connections
-    // // could help to stabilize bibliolog
-    // setTimeout(function () {
-    //   console.error(new Date() + ' - Aborting ezpaarse job ' + streamName);
-    //   ezpaarseJobs[streamName].request.end();
-    // }, 60 * 60 * 1000);
+      if (viewer && viewer.connected) {
+        viewer.write(`${JSON.stringify(data)}\n`);
+      }
 
-  }); // forEach streams
-}, config.autoConnectDelay);
+      debug(`+log|${streamName}-ezpaarse|bibliolog|info|${msg}`);
+    }));
 
+  // check the ezpaarse connection is not closed
+  job.request.on('error', err => { restartJob(err); });
+  job.request.on('close', () => { restartJob(); });
+  job.request.on('end', () => { restartJob(); });
 
-/**
- * Try to (re)connect to bibliomap each N seconds
- */
-setInterval(function () {
-  // si une connexion avec bibliomap est en cours on ne fait rien
-  if (bibliomap !== null) return;
-
-  bibliomap = net.connect(config.broadcast['bibliomap-viewer']);
-  bibliomap.on('connect', function () {
-    console.error(new Date() + ' - Connected to bibliomap ' + config.broadcast['bibliomap-viewer'].host + ':' + config.broadcast['bibliomap-viewer'].port + ' => ready to broadcast ezpaarse ECs');
-    bibliomap.connected = true;
+  job.request.on('response', response => {
+    printLog(`Job initiated for ${streamName} [id:${response.headers['job-id']}]`);
   });
-  bibliomap.on('error', function (err) {
-    console.error(new Date() + ' - Bibliomap connection got error: ' + err);
-  });
-  bibliomap.on('close', function () {
-    console.error(new Date() + ' - Bibliomap connection closed');
-    bibliomap = null;
-  });
-}, config.autoConnectDelay);
+
+  function restartJob(err) {
+    if (job.restarted) { return; }
+
+    if (err) {
+      printLog(`Job error for ${streamName} [${err}]`);
+    } else {
+      printLog(`Job terminated for ${streamName}`);
+    }
+
+    job.restarted = true;
+    ezpaarseJobs.delete(streamName);
+
+    debug(`Creating a new job for ${streamName} in ${config.autoConnectDelay}ms`);
+
+    setTimeout(() => {
+      createJob(streamName);
+    }, config.autoConnectDelay);
+  }
+}
+
+function printLog(str) {
+  console.error(`${new Date()} - ${str}`);
+}
