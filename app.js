@@ -123,9 +123,8 @@ function createJob(streamName) {
   job.request.on('error', err => { restartJob(err); });
   job.request.on('close', () => { restartJob(); });
   job.request.on('end', () => { restartJob(); });
-
   job.request.on('response', response => {
-    printLog(`Job initiated for ${streamName} [id:${response.headers['job-id']}]`);
+    printLog(`Job ${response.headers['job-id']} initiated for ${streamName}`);
   });
 
   function restartJob(err) {
