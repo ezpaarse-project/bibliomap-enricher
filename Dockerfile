@@ -22,7 +22,7 @@ COPY . /app
 # http port is not used
 RUN echo '{ \
   "httpPort": 3000, \
-  "configPath": "/app/config.json" \
+  "configPath": "/app/config/default.json" \
 }' > /etc/ezmaster.json
 
 # run the application
