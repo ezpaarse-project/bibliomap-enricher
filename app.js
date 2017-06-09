@@ -82,25 +82,13 @@ function createJob(streamName) {
   }
 
   printLog(`Creating an ezPAARSE job for ${streamName} at ${config.ezpaarse.url}`);
-
-   var headers = {};
-
-   if(process.env.BBE_LOGSTREAMS){
-   
-	switch(process.env.BBE_LOGSTREAMS){
-	case "_ISTEX_":
-	  headers = config.ezpaarse.headers.ISTEX;
-	  break;
-	case "_CNRS_":
-	  headers = config.ezpaarse.headers.BIBCNRS;
-	  break;
-	}
-   }
+ 
+  console.log(JSON.stringify(config.ezpaarse.headers));
 
   const job = {
     request: request.post({
       url: config.ezpaarse.url,
-      headers: headers
+      headers: config.ezpaarse.headers
     }),
     writeStream: new PassThrough()
   };

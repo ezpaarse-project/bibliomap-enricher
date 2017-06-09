@@ -1,9 +1,6 @@
 {
   "ezpaarse": {
-    "url": "BBE_EZPAARSE_URL",
-    "headers": {
-      "ezPAARSE-Predefined-Settings": "BBE_EZPAARSE_PREDEF"
-    }
+    "url": "BBE_EZPAARSE_URL"
   },
   "listen": {
     "bibliomap-harvester": {

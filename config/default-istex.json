@@ -1,0 +1,11 @@
+{
+"ezpaarse": {
+    "headers": {
+	"Accept": "application/jsonstream",
+      	"Double-Click-Removal": "false",
+      	"crossref-enrich": "false",
+      	"Istex-Buffer-Size": 1,
+      	"ezPAARSE-Predefined-Settings": "00-fr-istex"
+    }
+  }
+}

@@ -2,19 +2,9 @@
   "ezpaarse": {
     "url": "http://127.0.0.1:59599",
     "headers": {
-      "ISTEX":{
 	"Accept": "application/jsonstream",
       	"Double-Click-Removal": "false",
-      	"crossref-enrich": "false",
-      	"Istex-Buffer-Size": 1,
-      	"ezPAARSE-Predefined-Settings": "00-fr-istex"
-      },"BIBCNRS":{
-	"Accept": "application/jsonstream",
-      	"Double-Click-Removal": "false",
-      	"crossref-enrich": "false",
-      	"ezPAARSE-Buffer-Size": 0,
-      	"ezPAARSE-Predefined-Settings": "00-fr-bibcnrs"
-      }
+      	"crossref-enrich": "false"
     }
   },
   "listen": {
@@ -31,3 +21,5 @@
   },
   "autoConnectDelay": 3000
 }
+
+
