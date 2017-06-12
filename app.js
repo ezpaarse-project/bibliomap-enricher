@@ -82,8 +82,6 @@ function createJob(streamName) {
   }
 
   printLog(`Creating an ezPAARSE job for ${streamName} at ${config.ezpaarse.url}`);
- 
-  console.log(JSON.stringify(config.ezpaarse.headers));
 
   const job = {
     request: request.post({
