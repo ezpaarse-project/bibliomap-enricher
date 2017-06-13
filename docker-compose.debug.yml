@@ -20,6 +20,7 @@ services:
       BBE_LISTEN_HARVESTER_PORT: ${BBE_LISTEN_HARVESTER_PORT}
       BBE_BROADCAST_VIEWER_HOST: ${BBE_BROADCAST_VIEWER_HOST}
       BBE_BROADCAST_VIEWER_PORT: ${BBE_BROADCAST_VIEWER_PORT}
+      BBE_LOGSTREAMS: ${BBH_LOGSTREAMS}
     tty: true         # to have nice debug(...) outputs
     stdin_open: true  # to be able to use CTRL+C to stop the debug
     command: npm start
