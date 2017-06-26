@@ -4,6 +4,7 @@
 	"Accept": "application/jsonstream",
       	"Double-Click-Removal": "false",
       	"crossref-enrich": "false",
+	"ezPAARSE-Buffer-Size": 0,
       	"Istex-Buffer-Size": 1,
       	"ezPAARSE-Predefined-Settings": "00-fr-istex"
     }
