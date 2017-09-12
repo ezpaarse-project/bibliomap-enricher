@@ -13,9 +13,10 @@ const JSONStream    = require('JSONStream');
 const net           = require('net');
 const debug         = require('debug')('bibliomap-enricher');
 
-const ezpaarseJobs = new Map();
-const viewerConfig = config.broadcast['bibliomap-viewer'];
-const viewerUrl    = `${viewerConfig.host}:${viewerConfig.port}`;
+const ezpaarseJobs      = new Map();
+const viewerConfig      = config.broadcast['bibliomap-viewer'];
+const viewerUrl         = `${viewerConfig.host}: ${viewerConfig.port}`;
+const broadcastedFields = config.broadcast.fields;
 
 /**
  * Connect to bibliomap-viewer
@@ -113,7 +114,11 @@ function createJob(streamName) {
       data.ezproxyName = streamName;
 
       if (viewer && viewer.connected) {
-        viewer.write(`${JSON.stringify(data)}\n`);
+        const exported = {};
+        broadcastedFields.forEach(f => {
+          if (data[f]) { exported[f] = data[f]; }
+        });
+        viewer.write(`${JSON.stringify(exported)}\n`);
       }
 
       debug(`+log|${streamName}-ezpaarse|bibliolog|info|${msg}`);

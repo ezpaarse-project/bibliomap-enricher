@@ -1,11 +1,11 @@
 {
-"ezpaarse": {
+  "ezpaarse": {
     "headers": {
-	"Accept": "application/jsonstream",
-      	"Double-Click-Removal": "false",
-      	"crossref-enrich": "false",
-      	"ezPAARSE-Buffer-Size": 0,
-      	"ezPAARSE-Predefined-Settings": "00-fr-bibcnrs"
+      "Accept": "application/jsonstream",
+      "Double-Click-Removal": "false",
+      "crossref-enrich": "false",
+      "ezPAARSE-Buffer-Size": 0,
+      "ezPAARSE-Predefined-Settings": "00-fr-bibcnrs"
     }
-}
+  }
 }
