@@ -1,6 +1,6 @@
 {
   "name": "bibliomap-enricher",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Listen for bibliomap-harvester data, send it to ezpaarse for enrichments and send the result to bibliomap-viewer",
   "main": "app.js",
   "scripts": {
